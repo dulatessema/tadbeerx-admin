@@ -9,7 +9,10 @@ import {
   DashboardStats
 } from '@/types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://tadbeerx-api.vercel.app';
+// Force production API URL in production environment
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://tadbeerx-api.vercel.app'
+  : process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
 
 class ApiClient {
   private baseURL: string;
