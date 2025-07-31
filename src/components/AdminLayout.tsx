@@ -42,9 +42,9 @@ const createNavigation = (counts: any) => [
     href: '/reference', 
     icon: GlobeAltIcon,
     submenu: [
-      { name: 'Nationalities', href: '/reference?tab=nationalities', icon: MapIcon, count: counts.nationalities },
-      { name: 'Skills', href: '/reference?tab=skills', icon: TableCellsIcon, count: counts.skills },
-      { name: 'Languages', href: '/reference?tab=languages', icon: LanguageIcon, count: counts.languages },
+      { name: 'Nationalities', href: '/nationalities', icon: MapIcon, count: counts.nationalities },
+      { name: 'Skills', href: '/skills', icon: TableCellsIcon, count: counts.skills },
+      { name: 'Languages', href: '/languages', icon: LanguageIcon, count: counts.languages },
     ]
   },
   { name: 'Audit Trail', href: '/audit', icon: DocumentTextIcon },
@@ -237,7 +237,21 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <div className="flex justify-between h-16">
               <div className="flex items-center">
                 <h2 className="text-lg font-semibold text-gray-900">
-                  {navigation.find(item => item.href === pathname)?.name || 'Admin Dashboard'}
+                  {(() => {
+                    // Find current page in main navigation
+                    const mainItem = navigation.find(item => item.href === pathname);
+                    if (mainItem) return mainItem.name;
+                    
+                    // Find current page in submenus
+                    for (const item of navigation) {
+                      if (item.submenu) {
+                        const subItem = item.submenu.find(sub => sub.href === pathname);
+                        if (subItem) return subItem.name;
+                      }
+                    }
+                    
+                    return 'Admin Dashboard';
+                  })()}
                 </h2>
               </div>
               
