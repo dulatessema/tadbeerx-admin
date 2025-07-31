@@ -7,9 +7,9 @@
   "env": {
     "NEXT_PUBLIC_API_BASE_URL": "https://tadbeerx-api.vercel.app"
   },
-  "functions": {
-    "app/**/*.js": {
-      "runtime": "nodejs18.x"
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_API_BASE_URL": "https://tadbeerx-api.vercel.app"
     }
   }
 }
