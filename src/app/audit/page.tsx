@@ -76,7 +76,7 @@ export default function AuditTrailPage() {
       if (filters.dateFrom) searchParams.set('dateFrom', filters.dateFrom);
       if (filters.dateTo) searchParams.set('dateTo', filters.dateTo);
 
-      const response = await fetch(`http://localhost:3000/api/audit?${searchParams}`, {
+      const response = await fetch(`https://tadbeerx-api.vercel.app/api/audit?${searchParams}`, {
         headers: {
           'Authorization': `Bearer ${getToken()}`,
         },

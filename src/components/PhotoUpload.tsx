@@ -54,7 +54,7 @@ export default function PhotoUpload({
       const formData = new FormData();
       formData.append('photo', file);
 
-      const response = await fetch(`http://localhost:3000/api/media/workers/${workerId}/photo`, {
+      const response = await fetch(`https://tadbeerx-api.vercel.app/api/media/workers/${workerId}/photo`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${getToken()}`,
@@ -87,7 +87,7 @@ export default function PhotoUpload({
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/media/workers/${workerId}/photo`, {
+      const response = await fetch(`https://tadbeerx-api.vercel.app/api/media/workers/${workerId}/photo`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${getToken()}`,

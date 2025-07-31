@@ -141,7 +141,7 @@ export default function EditWorkerPage() {
 
   const loadWorkerMedia = async (workerId: string) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/media/workers/${workerId}/slots`, {
+      const response = await fetch(`https://tadbeerx-api.vercel.app/api/media/workers/${workerId}/slots`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('admin_token')}`,
         },

@@ -127,7 +127,7 @@ const MediaUpload = memo(function MediaUpload({
         }
       }
 
-      const uploadUrl = `http://localhost:3000/api/media/workers/${workerId}/slots`;
+      const uploadUrl = `https://tadbeerx-api.vercel.app/api/media/workers/${workerId}/slots`;
       console.log('📤 Making upload request to:', uploadUrl);
       console.log('🔐 Using Authorization header:', `Bearer ${token.substring(0, 20)}...`);
 
@@ -211,7 +211,7 @@ const MediaUpload = memo(function MediaUpload({
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/media/workers/${workerId}/slots/${slotType}`, {
+      const response = await fetch(`https://tadbeerx-api.vercel.app/api/media/workers/${workerId}/slots/${slotType}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${getToken()}`,

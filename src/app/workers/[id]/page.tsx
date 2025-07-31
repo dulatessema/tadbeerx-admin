@@ -40,7 +40,7 @@ export default function WorkerDetailPage() {
   const loadWorker = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:3000/api/workers/admin/${workerId}`, {
+      const response = await fetch(`https://tadbeerx-api.vercel.app/api/workers/admin/${workerId}`, {
         headers: {
           'Authorization': `Bearer ${getToken()}`,
         },
@@ -61,7 +61,7 @@ export default function WorkerDetailPage() {
 
   const loadWorkerPhotos = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/media/workers/${workerId}/photos`, {
+      const response = await fetch(`https://tadbeerx-api.vercel.app/api/media/workers/${workerId}/photos`, {
         headers: {
           'Authorization': `Bearer ${getToken()}`,
         },
@@ -86,7 +86,7 @@ export default function WorkerDetailPage() {
 
   const handleStatusUpdate = async (field: string, value: any) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/workers/${workerId}`, {
+      const response = await fetch(`https://tadbeerx-api.vercel.app/api/workers/${workerId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
