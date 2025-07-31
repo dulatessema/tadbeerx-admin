@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { removeToken } from '@/lib/auth';
+import { useNavigationCounts } from '@/hooks/useNavigationCounts';
 import {
   HomeIcon,
   UsersIcon,
@@ -15,22 +16,37 @@ import {
   BellIcon,
   GlobeAltIcon,
   DocumentTextIcon,
+  UserPlusIcon,
+  TableCellsIcon,
+  LanguageIcon,
+  MapIcon,
 } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 
-const navigation = [
+// Create navigation factory function to include counts
+const createNavigation = (counts: any) => [
   { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
   { 
     name: 'Workers', 
     href: '/workers', 
     icon: UsersIcon,
+    count: counts.workers,
     submenu: [
-      { name: 'All Workers', href: '/workers' },
-      { name: 'Add Worker', href: '/workers/add' },
+      { name: 'All Workers', href: '/workers', icon: UsersIcon, count: counts.workers },
+      { name: 'Add Worker', href: '/workers/add', icon: UserPlusIcon },
     ]
   },
   { name: 'Inquiries', href: '/inquiries', icon: ChatBubbleLeftRightIcon },
-  { name: 'Reference Data', href: '/reference', icon: GlobeAltIcon },
+  { 
+    name: 'Reference Data', 
+    href: '/reference', 
+    icon: GlobeAltIcon,
+    submenu: [
+      { name: 'Nationalities', href: '/reference?tab=nationalities', icon: MapIcon, count: counts.nationalities },
+      { name: 'Skills', href: '/reference?tab=skills', icon: TableCellsIcon, count: counts.skills },
+      { name: 'Languages', href: '/reference?tab=languages', icon: LanguageIcon, count: counts.languages },
+    ]
+  },
   { name: 'Audit Trail', href: '/audit', icon: DocumentTextIcon },
   { name: 'Settings', href: '/settings', icon: Cog6ToothIcon },
 ];
@@ -43,6 +59,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const counts = useNavigationCounts();
+
+  // Create navigation with counts
+  const navigation = createNavigation(counts);
 
   const handleLogout = () => {
     removeToken();
@@ -86,9 +106,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     )}
                   >
                     <item.icon className="mr-4 h-6 w-6" />
-                    {item.name}
+                    <span className="flex-1">{item.name}</span>
+                    {item.count !== undefined && (
+                      <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                        {counts.loading ? '...' : item.count}
+                      </span>
+                    )}
                   </Link>
-                  {item.submenu && (pathname === item.href || item.submenu.some((sub: any) => pathname === sub.href)) && (
+                  {item.submenu && (
                     <div className="ml-10 mt-1 space-y-1">
                       {item.submenu.map((subItem: any) => (
                         <Link
@@ -101,7 +126,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                               : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                           )}
                         >
-                          {subItem.name}
+                          <span className="flex-1">{subItem.name}</span>
+                          {subItem.count !== undefined && (
+                            <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                              {counts.loading ? '...' : subItem.count}
+                            </span>
+                          )}
                         </Link>
                       ))}
                     </div>
@@ -134,9 +164,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                       )}
                     >
                       <item.icon className="mr-3 h-6 w-6" />
-                      {item.name}
+                      <span className="flex-1">{item.name}</span>
+                      {item.count !== undefined && (
+                        <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                          {counts.loading ? '...' : item.count}
+                        </span>
+                      )}
                     </Link>
-                    {item.submenu && (pathname === item.href || item.submenu.some((sub: any) => pathname === sub.href)) && (
+                    {item.submenu && (
                       <div className="ml-8 mt-1 space-y-1">
                         {item.submenu.map((subItem: any) => (
                           <Link
@@ -149,7 +184,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                 : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                             )}
                           >
-                            {subItem.name}
+                            <span className="flex-1">{subItem.name}</span>
+                            {subItem.count !== undefined && (
+                              <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                {counts.loading ? '...' : subItem.count}
+                              </span>
+                            )}
                           </Link>
                         ))}
                       </div>
