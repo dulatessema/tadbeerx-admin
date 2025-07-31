@@ -9,8 +9,8 @@ import {
   DashboardStats
 } from '@/types';
 
-// Always use production API URL, with fallbacks
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://tadbeerx-api.vercel.app';
+// Hardcode production API URL to fix localhost issue
+const API_BASE_URL = 'https://tadbeerx-api.vercel.app';
 
 // Debug logging (will be visible in browser console)
 if (typeof window !== 'undefined') {
