@@ -70,7 +70,12 @@ export default function SkillsPage() {
     try {
       const currentItem = skills.find(item => item.id === id);
       if (currentItem) {
-        await api.updateSkill(id, { active: !currentItem.active });
+        await api.updateSkill(id, { 
+          name: currentItem.name,
+          category: currentItem.category,
+          displayOrder: currentItem.displayOrder,
+          active: !currentItem.active 
+        });
         setSkills(prev => prev.map(item => 
           item.id === id ? { ...item, active: !item.active } : item
         ));
