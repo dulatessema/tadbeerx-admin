@@ -9,10 +9,17 @@ import {
   DashboardStats
 } from '@/types';
 
-// Force production API URL in production environment
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://tadbeerx-api.vercel.app'
-  : process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+// Always use production API URL, with fallbacks
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://tadbeerx-api.vercel.app';
+
+// Debug logging (will be visible in browser console)
+if (typeof window !== 'undefined') {
+  console.log('🔧 API Configuration:', {
+    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+    NODE_ENV: process.env.NODE_ENV,
+    API_BASE_URL: API_BASE_URL
+  });
+}
 
 class ApiClient {
   private baseURL: string;
