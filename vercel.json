@@ -6,5 +6,10 @@
   "outputDirectory": ".next",
   "env": {
     "NEXT_PUBLIC_API_BASE_URL": "https://tadbeerx-api.vercel.app"
+  },
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_API_BASE_URL": "https://tadbeerx-api.vercel.app"
+    }
   }
 }
