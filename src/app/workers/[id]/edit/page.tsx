@@ -63,14 +63,7 @@ export default function EditWorkerPage() {
     skills: Skill[];
     languages: Language[];
   }>({ nationalities: [], skills: [], languages: [] });
-  const [workerMedia, setWorkerMedia] = useState<{
-    slots: {
-      image1Postcard?: any;
-      image2?: any;
-      image3?: any;
-      video1?: any;
-    };
-  }>({ slots: {} });
+  const [workerMedia, setWorkerMedia] = useState<any>({});
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -149,13 +142,14 @@ export default function EditWorkerPage() {
       
       if (response.ok) {
         const data = await response.json();
-        setWorkerMedia({ slots: data.slots || {} });
-        return data;
+        console.log('📋 Worker media loaded:', data);
+        setWorkerMedia(data.slots || {});
+        return data.slots || {};
       }
     } catch (error) {
       console.error('Failed to load worker media:', error);
     }
-    return { slots: {} };
+    return {};
   };
 
   const handleMediaUpdated = useCallback(() => {
@@ -616,7 +610,7 @@ export default function EditWorkerPage() {
             
             <MediaUpload
               workerId={workerId}
-              mediaSlots={workerMedia.slots}
+              mediaSlots={workerMedia}
               onMediaUpdated={handleMediaUpdated}
             />
           </div>

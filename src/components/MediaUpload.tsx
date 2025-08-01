@@ -10,31 +10,21 @@ import {
 } from '@heroicons/react/24/outline';
 import { getToken } from '@/lib/auth';
 
-interface MediaItem {
-  id: string;
-  type: 'image' | 'video';
-  filename: string;
-  originalName: string;
-  path: string;
+interface BlobMediaItem {
   url: string;
-  thumbnailPath?: string;
-  thumbnailUrl?: string;
+  filename: string;
   size: number;
   mimeType: string;
-  width?: number;
-  height?: number;
-  duration?: number;
   uploadedAt: string;
   uploadedBy: string;
-  order: number;
 }
 
 interface MediaSlots {
-  image1Postcard?: MediaItem | null;
-  image2?: MediaItem | null;
-  image3?: MediaItem | null;
-  videoThumbnail?: MediaItem | null;
-  video1?: MediaItem | null;
+  image1Postcard?: BlobMediaItem | null;
+  image2?: BlobMediaItem | null;
+  image3?: BlobMediaItem | null;
+  videoThumbnail?: BlobMediaItem | null;
+  video1?: BlobMediaItem | null;
 }
 
 interface MediaUploadProps {
@@ -207,7 +197,7 @@ const MediaUpload = memo(function MediaUpload({
     const media = mediaSlots[slotType];
     if (!media) return;
     
-    setDeleting(media.id);
+    setDeleting(slotType);
     setError(null);
 
     try {
@@ -269,7 +259,7 @@ const MediaUpload = memo(function MediaUpload({
       console.log(`🖼️ ${slotType} media:`, {
         url: media.url,
         filename: media.filename,
-        type: media.type
+        mimeType: media.mimeType
       });
     }
     
@@ -284,12 +274,12 @@ const MediaUpload = memo(function MediaUpload({
             <button
               type="button"
               onClick={() => handleDeleteMedia(slotType)}
-              disabled={deleting === media.id}
+              disabled={deleting === slotType}
               className="text-red-600 hover:text-red-700 text-sm flex items-center"
               title="Delete media"
             >
               <TrashIcon className="h-4 w-4 mr-1" />
-              {deleting === media.id ? 'Deleting...' : 'Delete'}
+              {deleting === slotType ? 'Deleting...' : 'Delete'}
             </button>
           )}
         </div>
@@ -299,24 +289,19 @@ const MediaUpload = memo(function MediaUpload({
           <div className="flex-shrink-0">
             {media ? (
               <div className="relative">
-                {media.type === 'image' ? (
-                  <img
-                    src={media.url}
-                    alt={title}
-                    className="h-20 w-20 rounded-lg object-cover border-2 border-gray-200"
-                    onLoad={() => console.log(`✅ Image loaded successfully: ${media.url}`)}
-                    onError={(e) => {
-                      console.error(`❌ Image failed to load: ${media.url}`);
-                      console.error('Error details:', e);
-                    }}
-                  />
-                ) : (
+                {isVideo ? (
                   <div className="relative h-20 w-20 rounded-lg border-2 border-gray-200 overflow-hidden">
-                    {media.thumbnailUrl ? (
+                    {/* For video, try to show thumbnail or show placeholder */}
+                    {mediaSlots.videoThumbnail ? (
                       <img
-                        src={media.thumbnailUrl}
+                        src={mediaSlots.videoThumbnail.url}
                         alt="Video thumbnail"
                         className="h-full w-full object-cover"
+                        onLoad={() => console.log(`✅ Video thumbnail loaded: ${mediaSlots.videoThumbnail!.url}`)}
+                        onError={(e) => {
+                          console.error(`❌ Video thumbnail failed to load: ${mediaSlots.videoThumbnail!.url}`);
+                          console.error('Error details:', e);
+                        }}
                       />
                     ) : (
                       <div className="h-full w-full bg-gray-100 flex items-center justify-center">
@@ -329,6 +314,17 @@ const MediaUpload = memo(function MediaUpload({
                       </div>
                     </div>
                   </div>
+                ) : (
+                  <img
+                    src={media.url}
+                    alt={title}
+                    className="h-20 w-20 rounded-lg object-cover border-2 border-gray-200"
+                    onLoad={() => console.log(`✅ Image loaded successfully: ${media.url}`)}
+                    onError={(e) => {
+                      console.error(`❌ Image failed to load: ${media.url}`);
+                      console.error('Error details:', e);
+                    }}
+                  />
                 )}
               </div>
             ) : (
@@ -373,10 +369,11 @@ const MediaUpload = memo(function MediaUpload({
 
             {media && (
               <div className="text-xs text-gray-500 mt-1">
-                <p>{media.originalName}</p>
+                <p>{media.filename}</p>
                 <p>{formatFileSize(media.size)}</p>
-                {media.duration && <p>Duration: {formatDuration(media.duration)}</p>}
-                {media.width && media.height && <p>{media.width}×{media.height}px</p>}
+                <p className="text-xs text-gray-400">
+                  Uploaded: {new Date(media.uploadedAt).toLocaleDateString()}
+                </p>
               </div>
             )}
           </div>
