@@ -20,6 +20,7 @@ import {
   TableCellsIcon,
   LanguageIcon,
   MapIcon,
+  BeakerIcon,
 } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 
@@ -49,6 +50,7 @@ const createNavigation = (counts: any) => [
   },
   { name: 'Audit Trail', href: '/audit', icon: DocumentTextIcon },
   { name: 'Settings', href: '/settings', icon: Cog6ToothIcon },
+  { name: 'Blob Test', href: '/blob-test', icon: BeakerIcon },
 ];
 
 interface AdminLayoutProps {
